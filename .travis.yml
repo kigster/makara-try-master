@@ -1,0 +1,26 @@
+env:
+  global:
+  - CC_TEST_REPORTER_ID=CHANGEME
+sudo: false
+language: ruby
+cache: bundler
+rvm:
+- 2.4.2
+- 2.3.5
+before_install: gem install bundler --pre
+before_script:
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
+  > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
+script:
+- bundle exec rspec
+after_script:
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+notifications:
+  webhooks:
+    urls:
+      - secure: CHANGEME
+    on_success: always
+    on_failure: onchange
+    on_start: never
